@@ -1,4 +1,4 @@
-"""Simple representation of a mobile device"""
+"""The Device class represents an Android device."""
 import socket
 
 from adb_shell.adb_device import AdbDeviceTcp
@@ -6,6 +6,7 @@ from adb_shell.exceptions import AdbConnectionError
 
 # myghost imports
 from myghost.core.cli.badges import Badges
+from myghost.core.base.loader import Loader
 
 
 class Device:
@@ -39,7 +40,11 @@ class Device:
         Badges.print_success("Interactive connection spawned!")
 
         Badges.print_empty("")
-        Badges.print_process("Loading device modules...")
+        Badges.print_process("Loading plugins...")
+
+        plugins = Loader.load_plugins([])  # Update this line!!!
+
+        Badges.print_information(f"Plugins loaded: {str(len(plugins))}")
 
     def send_command(self, command: str):
         """Send command to connected device."""
@@ -51,6 +56,12 @@ class Device:
 
     def is_rooted(self) -> bool:
         """Returns whether a device is rooted or not."""
+
+    def upload_file(self, file_path: str):
+        """Upload a file to the connected device."""
+
+    def download_file(self, file_path: str):
+        """Downloads a file from the connected device."""
 
 
 def main():
