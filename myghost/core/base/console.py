@@ -35,8 +35,8 @@ class Console:
             case ['clear']:
                 self._clear()
 
-            case ['connect', *args]:
-                self._connect(args)
+            case ['connect', host, port]:
+                self._connect(host, port)
 
             case ['disconnect', *args]:
                 self._disconnect()
