@@ -35,11 +35,11 @@ class Console:
             case ['clear']:
                 self._clear()
 
-            case ['connect', host, port]:
-                self._connect(host, port)
+            case ['connect', *args]:
+                self._connect(args)
 
-            case ['disconnect', *args]:
-                self._disconnect()
+            case ['disconnect', device_id]:
+                self._disconnect(device_id)
             case _:
                 self._command_unrecognized()
 
@@ -81,25 +81,28 @@ class Console:
 
     def _connect(self, arguments: list):
         """Connect to mobile device."""
-        try:
-            host, port = arguments
-            device = Device(host, port)
-
-        except ValueError:
-            raise ValueError(f"Wrong input: {arguments}")
+        match arguments:
+            case [host, port]:
+                device = Device(host, port)
+            case [host]:
+                device = Device(host)
+            case _:
+                Badges.print_empty("Usage: connect <address>")
+                return
 
         connected = device.connect()
 
+        # Override the following block
         if connected:
             self.devices.update({
                 len(self.devices): {
                     'host': host,
-                    'port': str(port),
+                    'port': str(device.port),
                     'device': device
                 }
             })
 
-    def _disconnect(self, *args):
+    def _disconnect(self, device_id):
         raise NotImplementedError
 
     def _devices(self):

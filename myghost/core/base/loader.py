@@ -3,17 +3,15 @@
 import importlib
 
 # myghost imports
-from myghost.lib.plugin import PluginInterface
+from myghost.lib.plugin import Plugin
 
 
 class Loader:
     """Responsible for loading all plugins."""
 
-    def __init__(self):
-        pass
-
-    def import_plugin(self, name: str) -> PluginInterface:
-        return importlib.import_module(name)
+    def import_plugin(self, name: str) -> Plugin:
+        """Imports a module given a name."""
+        return importlib.import_module(name)  # type: ignore
 
     def load_plugins(self, plugins: list[str]) -> None:
         """Load the plugins defined in the plugins list."""
