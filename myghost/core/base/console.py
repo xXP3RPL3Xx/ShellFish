@@ -8,7 +8,7 @@ from myghost.core.cli.tables import Tables
 from myghost.core.cli.special_character import SpecialCharacter as SpChar
 
 
-class Console:
+class MainConsole:
     def __init__(self):
         self.devices: dict = dict()
         self.banner = """{}{}
@@ -116,8 +116,57 @@ class Console:
         Badges.print_error("Unrecognized command!")
 
 
+class InteractConsole:
+    """Represents the interactive session."""
+
+    def shell(self) -> None:
+        # cmd loop
+        while True:
+            command: str = input(f'{SpChar.REMOVE.value}(INTERACTIVE)> ')
+            self.match_command(command)
+
+    def match_command(self, command: str):
+        match command.split():
+            case ['help']:
+                self._help()
+
+            case ['exit']:
+                self.exit_session()
+
+            case ['clear']:
+                self.clear_screen()
+
+            case _:
+                self.command_unrecognized()
+
+    def exit_session(self) -> None:
+        pass
+
+    @staticmethod
+    def clear_screen():
+        """Clear terminal screen (works only for linux)."""
+        Badges.print_empty(SpChar.CLEAR.value, end='')
+
+    @staticmethod
+    def _help() -> None:
+        print("Core commands:\n")
+        print("help: show help menu")
+        print("clear: clear screen")
+        print("exit: exit myghost")
+
+        Tables().print_table("Core Commands", ('Command', 'Description'), *[
+            ('clear', 'Clear terminal window.'),
+            ('exit', 'Exit Ghost Framework.'),
+            ('help', 'Show available commands.')
+        ])
+
+    @staticmethod
+    def command_unrecognized():
+        Badges.print_error("Unrecognized command!")
+
+
 def main():
-    console = Console()
+    console = MainConsole()
     console.shell()
 
 

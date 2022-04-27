@@ -1,5 +1,6 @@
 """The Device class represents an Android device."""
 import socket
+from dataclasses import dataclass
 
 from adb_shell.adb_device import AdbDeviceTcp
 from adb_shell.exceptions import AdbConnectionError
@@ -7,6 +8,16 @@ from adb_shell.exceptions import AdbConnectionError
 # myghost imports
 from myghost.core.cli.badges import Badges
 from myghost.core.base.loader import Loader
+
+
+@dataclass
+class DeviceInfo:
+    """Stores basic information about the device."""
+
+    device_name: str = None
+    device_id: int = None
+    android_version: str = None
+    is_rooted: bool = False
 
 
 class Device:
@@ -17,6 +28,8 @@ class Device:
         self.port: int = port
 
         self.device = AdbDeviceTcp(self.host, self.port, default_transport_timeout_s=timeout)
+
+        self.info = DeviceInfo()
 
     def connect(self) -> bool:
         """Connect to the device via TCP."""
@@ -38,13 +51,25 @@ class Device:
     def interact(self):
         """Interact with a connected device."""
         Badges.print_success("Interactive connection spawned!")
-
         Badges.print_empty("")
         Badges.print_process("Loading plugins...")
 
-        plugins = Loader.load_plugins([])  # Update this line!!!
+        # Load plugins here and available commands.
+        plugins = None   # Update line!!!
+        commands = None  # Update line!!!
 
-        Badges.print_information(f"Plugins loaded: {str(len(plugins))}")
+        Badges.print_information(f"Plugins loaded: {None}")  # print loaded plugins here!
+
+        # Start new Interact session.
+        session_active: bool = True
+
+        while session_active:
+            command = input("Interactive Session> ")
+
+            if command in commands:
+                pass
+                # execute proper command.
+            # handle help, clear, exit
 
     def send_command(self, command: str):
         """Send command to connected device."""
