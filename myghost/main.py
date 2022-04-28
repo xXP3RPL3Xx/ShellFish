@@ -1,8 +1,8 @@
-from myghost.core.base.console import Console
+from myghost.core.base.console import MainConsole
 
 
 def main():
-    console = Console()
+    console = MainConsole()
     console.shell()
 
 

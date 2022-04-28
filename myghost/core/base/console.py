@@ -53,10 +53,7 @@ class MainConsole:
 
     @staticmethod
     def _help() -> None:
-        print("Core commands:\n")
-        print("help: show help menu")
-        print("clear: clear screen")
-        print("exit: exit myghost")
+        """Print a basic help menu for available commands."""
 
         Tables().print_table("Core Commands", ('Command', 'Description'), *[
             ('clear', 'Clear terminal window.'),
@@ -118,17 +115,20 @@ class MainConsole:
 
 class InteractConsole:
     """Represents the interactive session."""
+    def __init__(self):
+        self.session_active: bool = False
 
     def shell(self) -> None:
+        self.session_active = True
         # cmd loop
-        while True:
+        while self.session_active:
             command: str = input(f'{SpChar.REMOVE.value}(INTERACTIVE)> ')
             self.match_command(command)
 
     def match_command(self, command: str):
         match command.split():
             case ['help']:
-                self._help()
+                self.show_help()
 
             case ['exit']:
                 self.exit_session()
@@ -140,7 +140,8 @@ class InteractConsole:
                 self.command_unrecognized()
 
     def exit_session(self) -> None:
-        pass
+        """Exit interactive session"""
+        self.session_active = False
 
     @staticmethod
     def clear_screen():
@@ -148,15 +149,10 @@ class InteractConsole:
         Badges.print_empty(SpChar.CLEAR.value, end='')
 
     @staticmethod
-    def _help() -> None:
-        print("Core commands:\n")
-        print("help: show help menu")
-        print("clear: clear screen")
-        print("exit: exit myghost")
-
+    def show_help() -> None:
         Tables().print_table("Core Commands", ('Command', 'Description'), *[
             ('clear', 'Clear terminal window.'),
-            ('exit', 'Exit Ghost Framework.'),
+            ('exit', 'Exit current device.'),
             ('help', 'Show available commands.')
         ])
 
