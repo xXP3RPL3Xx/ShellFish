@@ -10,7 +10,7 @@ from myghost.core.cli.special_character import SpecialCharacter as SpChar
 
 class MainConsole:
     def __init__(self):
-        self.devices: dict = dict()
+        self.devices: dict[Device: int] = dict()
         self.banner = """{}{}
            .--. .-.               .-.
           : .--': :              .' `.
@@ -91,13 +91,7 @@ class MainConsole:
 
         # Override the following block
         if connected:
-            self.devices.update({
-                len(self.devices): {
-                    'host': host,
-                    'port': str(device.port),
-                    'device': device
-                }
-            })
+            self.devices.update({device: device.device_id})
 
     def _disconnect(self, device_id):
         raise NotImplementedError
@@ -115,6 +109,7 @@ class MainConsole:
 
 class InteractConsole:
     """Represents the interactive session."""
+
     def __init__(self):
         self.session_active: bool = False
 

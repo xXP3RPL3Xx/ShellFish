@@ -14,8 +14,8 @@ from myghost.core.base.loader import Loader
 class DeviceInfo:
     """Stores basic information about the device."""
 
-    device_name: str = None
-    device_id: int = None
+    name: str = None
+    id: int = None
     android_version: str = None
     is_rooted: bool = False
 
@@ -48,7 +48,8 @@ class Device:
         """Disconnect from the connected device."""
         self.device.close()
 
-    def interact(self):
+    @staticmethod
+    def interact():
         """Interact with a connected device."""
         Badges.print_success("Interactive connection spawned!")
         Badges.print_empty("")
@@ -88,11 +89,33 @@ class Device:
     def download_file(self, file_path: str):
         """Downloads a file from the connected device."""
 
+    @property
+    def name(self):
+        return self.info.name
+
+    @name.setter
+    def name(self, new_name: str):
+        self.info.name = new_name
+
+    @property
+    def id(self):
+        return self.info.id
+
+    @id.setter
+    def id(self, new_id: int):
+        self.info.id = new_id
+
 
 def main():
     device = Device("0.0.0.0")
+    device.id = 1
+    device.name = "Sasha"
+
     device.connect()
     device.send_command("command")
+
+    print(device.id)
+    print(device.name)
 
 
 if __name__ == '__main__':
