@@ -105,17 +105,25 @@ class Device:
     def id(self, new_id: int):
         self.info.id = new_id
 
+    @property
+    def android_version(self):
+        return self.info.android_version
+
+    @android_version.setter
+    def android_version(self, new_android_version: str):
+        self.info.android_version = new_android_version
+
 
 def main():
     device = Device("0.0.0.0")
     device.id = 1
     device.name = "Sasha"
+    device.android_version = "Oreo"
 
     device.connect()
     device.send_command("command")
 
-    print(device.id)
-    print(device.name)
+    print(device.id, device.name, device.android_version)
 
 
 if __name__ == '__main__':
