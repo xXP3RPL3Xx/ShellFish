@@ -1,4 +1,5 @@
 import sys
+import readline
 
 # myghost imports
 from myghost.core.base.device import Device
@@ -10,6 +11,7 @@ from myghost.core.cli.special_character import SpecialCharacter as SpChar
 
 class MainConsole:
     def __init__(self):
+        self.command_list: list[str] = ["help", "connect", "devices", "exit", "disconnect", "clear"]
         self.devices: dict[Device: int] = dict()
         self.banner = """{}{}
            .--. .-.               .-.
@@ -23,6 +25,14 @@ class MainConsole:
         """.format(SpChar.CLEAR.value, SpChar.END.value,
                    SpChar.BOLD.value + Color.WHITE.value,
                    SpChar.END.value, SpChar.LINE.value, SpChar.END.value)
+
+    def autocomplete(self, text, state):
+        """Try to complete a user's input."""
+        options = [command for command in self.command_list if command.startswith(text)]
+        if state < len(options):
+            return options[state]
+        else:
+            return None
 
     def match_command(self, command: str):
         match command.split():
@@ -40,6 +50,10 @@ class MainConsole:
 
             case ['disconnect', device_id]:
                 self._disconnect(device_id)
+
+            case ['devices']:
+                self._devices()
+
             case _:
                 self._command_unrecognized()
 
@@ -47,6 +61,8 @@ class MainConsole:
         # Print banner
         Badges.print_empty(self.banner)
         # cmd loop
+        readline.parse_and_bind("tab: complete")
+        readline.set_completer(self.autocomplete)
         while True:
             command: str = input(f'{SpChar.REMOVE.value}(myghost)> ')
             self.match_command(command)
@@ -69,6 +85,7 @@ class MainConsole:
         for device in list(self.devices):
             self.devices[device]['device'].disconnect()
             del self.devices[device]
+        self._clear()
         sys.exit(0)
 
     @staticmethod
@@ -91,7 +108,7 @@ class MainConsole:
 
         # Override the following block
         if connected:
-            self.devices.update({device: device.device_id})
+            self.devices.update({device: Device.id})
 
     def _disconnect(self, device_id):
         raise NotImplementedError
