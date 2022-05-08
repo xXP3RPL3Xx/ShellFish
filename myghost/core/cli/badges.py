@@ -1,6 +1,6 @@
 class Badges:
     @staticmethod
-    def print_empty(message="", end='\n'):
+    def print_empty(message: str = "", end: str = '\n') -> None:
         print(f"\033[1K\r{message}", end=end)
 
     @staticmethod

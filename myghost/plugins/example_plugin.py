@@ -1,12 +1,22 @@
-from myghost.lib.plugin import Plugin
+from myghost.lib.plugin import Plugin, PluginInfo
+from dataclasses import dataclass
 
 
-class ExamplePlugin(Plugin):
-    def __init__(self, name, version, description, usage, needs_root):
-        super().__init__(name, version, description, usage, needs_root)
+@dataclass
+class MyGhostPluginInfo(PluginInfo):
+    name = "Example Plugin"
+    version = "version"
+    description = "description"
+    usage = "There is no usage."
+    needs_root = False
+
+
+class MyGhostPlugin(Plugin):
+    def __init__(self):
+        super(MyGhostPlugin, self).__init__(MyGhostPluginInfo)
 
     def initialize(self) -> None:
-        print("Initializing ...")
+        """Initialize the plugin."""
 
     def run(self):
         print("run plugin ...")

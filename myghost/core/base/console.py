@@ -3,15 +3,18 @@ import readline
 
 # myghost imports
 from myghost.core.base.device import Device
+from myghost.core.base.execute import Executer
 from myghost.core.cli.colors import Color
 from myghost.core.cli.badges import Badges
 from myghost.core.cli.tables import Tables
 from myghost.core.cli.special_character import SpecialCharacter as SpChar
+from myghost.commands import clear_screen
 
 
 class MainConsole:
     def __init__(self):
         self.command_list: list[str] = ["help", "connect", "devices", "exit", "disconnect", "clear"]
+        self.executer: Executer = Executer()
         self.devices: dict[Device: int] = dict()
         self.banner = """{}{}
            .--. .-.               .-.
@@ -43,7 +46,7 @@ class MainConsole:
                 self._exit()
 
             case ['clear']:
-                self._clear()
+                self.executer.execute(clear_screen)
 
             case ['connect', *args]:
                 self._connect(args)
@@ -85,13 +88,8 @@ class MainConsole:
         for device in list(self.devices):
             self.devices[device]['device'].disconnect()
             del self.devices[device]
-        self._clear()
+        self.executer.execute(clear_screen)
         sys.exit(0)
-
-    @staticmethod
-    def _clear():
-        """Clear terminal screen (works only for linux)."""
-        Badges.print_empty(SpChar.CLEAR.value, end='')
 
     def _connect(self, arguments: list):
         """Connect to mobile device."""
