@@ -1,14 +1,18 @@
-from myghost.lib.command import Command
+from myghost.lib.command import Command, CommandInfo
 from myghost.core.cli.special_character import SpecialCharacter
 
 
 class MyGhostCommand(Command):
     """Clear terminal screen (works only for linux)."""
-    def run(self):
+    
+    def __init__(self) -> None:
+        super(MyGhostCommand, self).__init__(CommandInfo("clear", "clear", "Clear terminal screen"))
+
+    def run(self, *args, **kwargs):
         self.print_empty(SpecialCharacter.CLEAR.value, end='')
 
 
-def run():
-    command = MyGhostCommand()
+def run(*args, **kwargs):
+    command: MyGhostCommand = MyGhostCommand()
 
-    command.run()
+    command.run(args, kwargs)

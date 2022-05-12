@@ -4,16 +4,19 @@ import readline
 # myghost imports
 from myghost.core.base.device import Device
 from myghost.core.base.execute import Executer
+from myghost.core.base.loader import Loader
 from myghost.core.cli.colors import Color
 from myghost.core.cli.badges import Badges
 from myghost.core.cli.tables import Tables
 from myghost.core.cli.special_character import SpecialCharacter as SpChar
+from myghost.lib.command import Command
 from myghost.commands import clear_screen
 
 
 class MainConsole:
     def __init__(self):
-        self.command_list: list[str] = ["help", "connect", "devices", "exit", "disconnect", "clear"]
+        self.commands: dict[str, Command] = dict()
+        self.loader = Loader()
         self.executer: Executer = Executer()
         self.devices: dict[Device: int] = dict()
         self.banner = """{}{}
@@ -31,13 +34,15 @@ class MainConsole:
 
     def autocomplete(self, text, state):
         """Try to complete a user's input."""
-        options = [command for command in self.command_list if command.startswith(text)]
+        options = [command_name for command_name in self.commands.keys() if command_name.startswith(text)]
+
         if state < len(options):
             return options[state]
         else:
             return None
 
-    def match_command(self, command: str):
+    def match_command(self, command_name: str, arguments: list[str]):
+        """
         match command.split():
             case ['help']:
                 self._help()
@@ -59,16 +64,27 @@ class MainConsole:
 
             case _:
                 self._command_unrecognized()
+        """
+        print(f"command: {command_name}  args: {arguments}")
+        if command_name in self.commands.keys():
+            self.commands[command_name].run(arguments)
+
+        else:
+            Badges.print_error("Unrecognized command!")
 
     def shell(self):
         # Print banner
         Badges.print_empty(self.banner)
+        # Load all available commands and their names
+        self.commands: dict[str, Command] = {command.name: command for command in self.loader.load_all()}
         # cmd loop
         readline.parse_and_bind("tab: complete")
         readline.set_completer(self.autocomplete)
         while True:
-            command: str = input(f'{SpChar.REMOVE.value}(myghost)> ')
-            self.match_command(command)
+            user_input: list[str] = input(f'{SpChar.REMOVE.value}(myghost)> ').split()
+            command: str = user_input[0]
+            arguments: list[str] = user_input[1:]
+            self.match_command(command, arguments)
 
     @staticmethod
     def _help() -> None:
@@ -117,9 +133,8 @@ class MainConsole:
     def _interact(self, *args):
         raise NotImplementedError
 
-    @staticmethod
-    def _command_unrecognized():
-        Badges.print_error("Unrecognized command!")
+    def get_commands(self):
+        """Get all available commands (built-in and plugin commands)."""
 
 
 class InteractConsole:
