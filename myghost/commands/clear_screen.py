@@ -6,13 +6,7 @@ class MyGhostCommand(Command):
     """Clear terminal screen (works only for linux)."""
     
     def __init__(self) -> None:
-        super(MyGhostCommand, self).__init__(CommandInfo("clear", "clear", "Clear terminal screen"))
+        super().__init__(CommandInfo("clear", "clear", "Clear terminal screen"))
 
     def run(self, *args, **kwargs):
         self.print_empty(SpecialCharacter.CLEAR.value, end='')
-
-
-def run(*args, **kwargs):
-    command: MyGhostCommand = MyGhostCommand()
-
-    command.run(args, kwargs)

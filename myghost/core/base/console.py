@@ -1,4 +1,3 @@
-import sys
 import readline
 
 # myghost imports
@@ -10,7 +9,6 @@ from myghost.core.cli.badges import Badges
 from myghost.core.cli.tables import Tables
 from myghost.core.cli.special_character import SpecialCharacter as SpChar
 from myghost.lib.command import Command
-from myghost.commands import clear_screen
 
 
 class MainConsole:
@@ -42,33 +40,9 @@ class MainConsole:
             return None
 
     def match_command(self, command_name: str, arguments: list[str]):
-        """
-        match command.split():
-            case ['help']:
-                self._help()
-
-            case ['exit']:
-                self._exit()
-
-            case ['clear']:
-                self.executer.execute(clear_screen)
-
-            case ['connect', *args]:
-                self._connect(args)
-
-            case ['disconnect', device_id]:
-                self._disconnect(device_id)
-
-            case ['devices']:
-                self._devices()
-
-            case _:
-                self._command_unrecognized()
-        """
-        print(f"command: {command_name}  args: {arguments}")
+        """Match the command name with the right command."""
         if command_name in self.commands.keys():
             self.commands[command_name].run(arguments)
-
         else:
             Badges.print_error("Unrecognized command!")
 
@@ -86,26 +60,10 @@ class MainConsole:
             arguments: list[str] = user_input[1:]
             self.match_command(command, arguments)
 
-    @staticmethod
-    def _help() -> None:
+    def show_help(self) -> None:
         """Print a basic help menu for available commands."""
-
-        Tables().print_table("Core Commands", ('Command', 'Description'), *[
-            ('clear', 'Clear terminal window.'),
-            ('connect', 'Connect device.'),
-            ('devices', 'Show connected devices.'),
-            ('disconnect', 'Disconnect device.'),
-            ('exit', 'Exit Ghost Framework.'),
-            ('help', 'Show available commands.'),
-            ('interact', 'Interact with device.')
-        ])
-
-    def _exit(self):
-        for device in list(self.devices):
-            self.devices[device]['device'].disconnect()
-            del self.devices[device]
-        self.executer.execute(clear_screen)
-        sys.exit(0)
+        Tables().print_table("Commands", ('Command', 'Description'),
+                             *[(command.name, command.help) for command in self.commands.values()])
 
     def _connect(self, arguments: list):
         """Connect to mobile device."""
@@ -123,18 +81,6 @@ class MainConsole:
         # Override the following block
         if connected:
             self.devices.update({device: Device.id})
-
-    def _disconnect(self, device_id):
-        raise NotImplementedError
-
-    def _devices(self):
-        raise NotImplementedError
-
-    def _interact(self, *args):
-        raise NotImplementedError
-
-    def get_commands(self):
-        """Get all available commands (built-in and plugin commands)."""
 
 
 class InteractConsole:
