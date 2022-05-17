@@ -4,7 +4,7 @@ from myghost.core.base.device_manager import DeviceManager
 
 
 class MyGhostCommand(Command):
-    """Connect to an Android device via ADB Bridge."""
+    """Connect to an Android device via Android Debug Bridge(ADB)."""
 
     def __init__(self) -> None:
         super().__init__(CommandInfo("connect", "connect <ip address>", "Connect to device."))

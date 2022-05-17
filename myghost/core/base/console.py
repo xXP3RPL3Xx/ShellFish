@@ -14,13 +14,15 @@ class MainConsole:
         self.commands: dict[str, Command] = dict()
         self.loader = Loader()
         self.banner = """{}{}
-           .--. .-.               .-.
-          : .--': :              .' `.
-          : : _ : `-.  .--.  .--.`. .'
-          : :; :: .. :' .; :`._-.': :
-          `.__.':_;:_;`.__.'`.__.':_;
-
-        --=[ {}Ghost Framework 1.0.0{}
+        
+         .--. .-.         .-.  .-.  .---.  _       .-.   
+        : .--': :         : :  : :  : .--':_;      : :   
+        `. `. : `-.  .--. : :  : :  : `;  .-. .--. : `-. 
+         _`, :: .. :' '_.': :_ : :_ : :   : :`._-.': .. :
+        `.__.':_;:_;`.__.'`.__;`.__;:_;   :_;`.__.':_;:_;
+                                                                                               
+                                                                                               
+        --=[ {}ShellFish Framework 1.0.0{}
         --=[ Developed by xXP3RPL3Xx
         """.format(SpChar.CLEAR.value, SpChar.END.value,
                    SpChar.BOLD.value + Color.WHITE.value,
@@ -51,7 +53,7 @@ class MainConsole:
         readline.parse_and_bind("tab: complete")
         readline.set_completer(self.autocomplete)
         while True:
-            user_input: list[str] = input(f'{SpChar.REMOVE.value}(myghost)> ').split()
+            user_input: list[str] = input(f'{SpChar.REMOVE.value}(shellfish)> ').split()
             command: str = user_input[0]
             arguments: list[str] = user_input[1:]
             self.match_command(command, arguments)
