@@ -7,7 +7,7 @@ from adb_shell.exceptions import AdbConnectionError
 
 # myghost imports
 from myghost.core.cli.badges import Badges
-from myghost.core.base.loader import Loader
+from myghost.core.base.console import InteractConsole
 
 
 @dataclass
@@ -15,7 +15,6 @@ class DeviceInfo:
     """Stores basic information about the device."""
 
     name: str = None
-    id: int = None
     android_version: str = None
     is_rooted: bool = False
 
@@ -51,26 +50,8 @@ class Device:
     @staticmethod
     def interact():
         """Interact with a connected device."""
-        Badges.print_success("Interactive connection spawned!")
-        Badges.print_empty("")
-        Badges.print_process("Loading plugins...")
-
-        # Load plugins here and available commands.
-        plugins = None   # Update line!!!
-        commands = None  # Update line!!!
-
-        Badges.print_information(f"Plugins loaded: {None}")  # print loaded plugins here!
-
-        # Start new Interact session.
-        session_active: bool = True
-
-        while session_active:
-            command = input("Interactive Session> ")
-
-            if command in commands:
-                pass
-                # execute proper command.
-            # handle help, clear, exit
+        interact_console: InteractConsole = InteractConsole()
+        interact_console.shell()
 
     def send_command(self, command: str):
         """Send command to connected device."""
@@ -98,14 +79,6 @@ class Device:
         self.info.name = new_name
 
     @property
-    def id(self):
-        return self.info.id
-
-    @id.setter
-    def id(self, new_id: int):
-        self.info.id = new_id
-
-    @property
     def android_version(self):
         return self.info.android_version
 
@@ -113,17 +86,19 @@ class Device:
     def android_version(self, new_android_version: str):
         self.info.android_version = new_android_version
 
+    def __repr__(self):
+        return f"Device(IP={self.host}, PORT={self.port})"
+
 
 def main():
     device = Device("0.0.0.0")
-    device.id = 1
     device.name = "Sasha"
     device.android_version = "Oreo"
 
     device.connect()
     device.send_command("command")
 
-    print(device.id, device.name, device.android_version)
+    print(device.name, device.android_version)
 
 
 if __name__ == '__main__':
