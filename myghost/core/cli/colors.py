@@ -1,9 +1,5 @@
-from enum import Enum
-
-
-class Color(Enum):
-    """Enum for terminal string colors."""
-
+class Color:
+    """Colors for terminal string colors."""
     BLACK = '\033[30m'
     RED = '\033[31m'
     GREEN = '\033[32m'

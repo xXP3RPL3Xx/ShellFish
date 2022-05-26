@@ -1,4 +1,4 @@
-from myghost.core.base.console import MainConsole
+from myghost.core.base.main_console import MainConsole
 
 
 def main():

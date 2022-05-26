@@ -1,13 +1,17 @@
 """The Device class represents an Android device."""
 import socket
+import readline
 from dataclasses import dataclass
 
 from adb_shell.adb_device import AdbDeviceTcp
 from adb_shell.exceptions import AdbConnectionError
 
 # myghost imports
+from myghost.core.base.console import Console
 from myghost.core.cli.badges import Badges
-from myghost.core.base.console import InteractConsole
+
+from myghost.core.cli.colors import Color
+from myghost.core.cli.special_character import SpecialCharacter as SpChar
 
 
 @dataclass
@@ -22,8 +26,8 @@ class DeviceInfo:
 class Device:
     """Represents a device e.g. a Samsung phone."""
 
-    def __init__(self, host, port: int = 5555, timeout=10) -> None:
-        self.host = host
+    def __init__(self, host: str, port: int = 5555, timeout=10) -> None:
+        self.host: str = host
         self.port: int = port
 
         self.device = AdbDeviceTcp(self.host, self.port, default_transport_timeout_s=timeout)
@@ -47,10 +51,9 @@ class Device:
         """Disconnect from the connected device."""
         self.device.close()
 
-    @staticmethod
-    def interact():
+    def interact(self):
         """Interact with a connected device."""
-        interact_console: InteractConsole = InteractConsole()
+        interact_console: DeviceConsole = DeviceConsole(self)
         interact_console.shell()
 
     def send_command(self, command: str):
@@ -88,6 +91,56 @@ class Device:
 
     def __repr__(self):
         return f"Device(IP={self.host}, PORT={self.port})"
+
+
+class DeviceConsole(Console):
+    """Represents the interactive session."""
+
+    def __init__(self, device: Device):
+        super().__init__()
+        self.modules = {}
+        self.device = device
+        self.session_active: bool = False
+
+        self.arrow = Color.RED + "└──>" + SpChar.END
+        self.arrow = str(" " + self.arrow)
+
+    def autocomplete(self, text, state) -> str | None:
+        """Try to complete a user's input."""
+        options: list[str] = [command_name for command_name in (self.commands.keys() | self.modules.keys())
+                              if command_name.startswith(text)]
+
+        if state < len(options):
+            return options[state]
+        else:
+            return None
+
+    def shell(self) -> None:
+        self.session_active = True
+        # Load all available commands and modules with their names
+        self.load_commands()
+        self.modules = {command.name: command for command in self.loader.load_modules()}
+        # cmd loop
+        readline.parse_and_bind("tab: complete")
+        readline.set_completer(self.autocomplete)
+        # cmd loop
+        Badges.print_empty("Interactive connection spawned.")
+        while self.session_active:
+            user_input: list[str] = input(f'{SpChar.REMOVE}{self.arrow}(INTERACTIVE)> ').split()
+            command: str = user_input[0]
+            arguments: list[str] = user_input[1:]
+            self.match_command(command, arguments)
+
+    def match_command(self, command_name: str, arguments: list[str]):
+        """Match the command name with the right command."""
+        if command_name in self.commands.keys():
+            self.commands[command_name].run(arguments)
+
+        elif command_name in self.modules.keys():
+            self.modules[command_name].run(self.device, arguments)
+
+        else:
+            Badges.print_error("Unrecognized command!")
 
 
 def main():

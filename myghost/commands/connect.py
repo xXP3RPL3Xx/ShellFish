@@ -1,6 +1,7 @@
 from myghost.core.base.device import Device
 from myghost.lib.command import Command, CommandInfo
-from myghost.core.base.device_manager import DeviceManager
+from myghost.core.db.database import Database
+from myghost.core.base.device_manager import BorgDeviceManager
 
 
 class MyGhostCommand(Command):
@@ -8,6 +9,7 @@ class MyGhostCommand(Command):
 
     def __init__(self) -> None:
         super().__init__(CommandInfo("connect", "connect <ip address>", "Connect to device."))
+        self.device_manager = BorgDeviceManager()
 
     def check_arguments(self, arguments: list[str]):
         match arguments:
@@ -25,12 +27,7 @@ class MyGhostCommand(Command):
             case _:
                 self.print_empty(self.info.usage)
 
-    def run(self, arguments: list[str]):
-        """Connect to the device with the given ip."""
-        self.check_arguments(arguments)
-
-    @staticmethod
-    def connect(host: str, port: int = None):
+    def connect(self, host: str, port: int = None):
         if port:
             device = Device(host, port)
         else:
@@ -38,4 +35,49 @@ class MyGhostCommand(Command):
 
         connected = device.connect()
         if connected:
-            DeviceManager().add_device(device)
+            self.device_manager.add_device(device)
+            print(f"Device added: {self.device_manager.devices}")
+
+    def run(self, arguments: list[str]):
+        """Connect to the device with the given ip."""
+        self.check_arguments(arguments)
+
+
+'''
+class MyGhostCommand(Command):
+    """Connect to an Android device via Android Debug Bridge(ADB)."""
+
+    def __init__(self) -> None:
+        super().__init__(CommandInfo("connect", "connect <ip address>", "Connect to device."))
+        self.database = Database()
+
+    def check_arguments(self, arguments: list[str]):
+        match arguments:
+            case [host, port]:
+                """Connect to device with given ip and port"""
+                try:
+                    port = int(port)
+                    self.connect(host, port)
+                except ValueError:
+                    self.print_error(f"Invalid port: {port}")
+
+            case [host]:
+                """Use default port."""
+                self.connect(host)
+            case _:
+                self.print_empty(self.info.usage)
+
+    def connect(self, host: str, port: int = None):
+        if port:
+            device = Device(host, port)
+        else:
+            device = Device(host)
+
+        connected = device.connect()
+        if connected:
+            self.database.add_device(device)
+
+    def run(self, arguments: list[str]):
+        """Connect to the device with the given ip."""
+        self.check_arguments(arguments)
+'''

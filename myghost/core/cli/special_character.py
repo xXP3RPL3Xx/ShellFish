@@ -1,8 +1,5 @@
-from enum import Enum
-
-
-class SpecialCharacter(Enum):
-    """Enum for special characters."""
+class SpecialCharacter:
+    """special characters."""
 
     END = '\033[0m'
     BOLD = '\033[1m'
