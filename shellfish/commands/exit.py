@@ -1,9 +1,9 @@
 import sys
 
-# from myghost.commands
-from myghost.lib.command import Command, CommandInfo
-from myghost.commands.clear_screen import MyGhostCommand as Clear
-from myghost.commands.disconnect import MyGhostCommand as Disconnect
+# from shellfish.commands
+from shellfish.lib.command import Command, CommandInfo
+from shellfish.commands.clear_screen import MyGhostCommand as Clear
+from shellfish.commands.disconnect import MyGhostCommand as Disconnect
 
 
 class MyGhostCommand(Command):

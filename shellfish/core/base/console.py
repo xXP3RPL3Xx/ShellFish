@@ -1,9 +1,9 @@
 from abc import abstractmethod
 
-# myghost imports
-from myghost.core.base.loader import Loader
-from myghost.lib.command import Command
-from myghost.lib.module import Module
+# shellfish imports
+from shellfish.core.base.loader import Loader
+from shellfish.lib.command import Command
+from shellfish.lib.module import Module
 
 
 class Console:

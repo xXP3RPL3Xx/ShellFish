@@ -1,4 +1,4 @@
-from myghost.core.cli.badges import Badges
+from shellfish.core.cli.badges import Badges
 
 
 class Tables:

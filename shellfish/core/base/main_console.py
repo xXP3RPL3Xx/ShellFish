@@ -1,11 +1,11 @@
 import readline
 
-from myghost.core.base.console import Console
-from myghost.lib.command import Command
+from shellfish.core.base.console import Console
+from shellfish.lib.command import Command
 
-from myghost.core.cli.badges import Badges
-from myghost.core.cli.colors import Color
-from myghost.core.cli.special_character import SpecialCharacter as SpChar
+from shellfish.core.cli.badges import Badges
+from shellfish.core.cli.colors import Color
+from shellfish.core.cli.special_character import SpecialCharacter as SpChar
 
 
 class MainConsole(Console):

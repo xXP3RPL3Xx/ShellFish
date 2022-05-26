@@ -1,4 +1,4 @@
-from myghost.core.base.main_console import MainConsole
+from shellfish.core.base.main_console import MainConsole
 
 
 def main():

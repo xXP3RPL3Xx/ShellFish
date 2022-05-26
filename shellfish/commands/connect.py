@@ -1,6 +1,6 @@
-from myghost.core.base.device import Device
-from myghost.lib.command import Command, CommandInfo
-from myghost.core.base.device_manager import BorgDeviceManager
+from shellfish.core.base.device import Device
+from shellfish.lib.command import Command, CommandInfo
+from shellfish.core.base.device_manager import BorgDeviceManager
 
 
 class MyGhostCommand(Command):
@@ -35,7 +35,6 @@ class MyGhostCommand(Command):
         connected = device.connect()
         if connected:
             self.device_manager.add_device(device)
-            print(f"Device added: {self.device_manager.devices}")
 
     def run(self, arguments: list[str]):
         """Connect to the device with the given ip."""

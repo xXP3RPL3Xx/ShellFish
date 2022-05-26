@@ -1,4 +1,4 @@
-from myghost.lib.module import Module, ModuleInfo
+from shellfish.lib.module import Module, ModuleInfo
 
 
 class MyGhostModule(Module):

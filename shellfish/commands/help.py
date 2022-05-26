@@ -1,6 +1,6 @@
-from myghost.lib.command import Command, CommandInfo
-from myghost.core.base.loader import Loader
-from myghost.core.cli.tables import Tables
+from shellfish.lib.command import Command, CommandInfo
+from shellfish.core.base.loader import Loader
+from shellfish.core.cli.tables import Tables
 
 
 class MyGhostCommand(Command):

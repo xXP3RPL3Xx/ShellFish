@@ -1,5 +1,5 @@
-from myghost.lib.command import Command, CommandInfo
-from myghost.core.cli.special_character import SpecialCharacter
+from shellfish.lib.command import Command, CommandInfo
+from shellfish.core.cli.special_character import SpecialCharacter
 
 
 class MyGhostCommand(Command):

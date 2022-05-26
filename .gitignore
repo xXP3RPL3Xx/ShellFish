@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-myghost/lib/
+shellfish/lib/
 lib64/
 parts/
 sdist/

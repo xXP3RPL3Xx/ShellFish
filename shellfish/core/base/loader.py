@@ -2,10 +2,10 @@
 import importlib.util
 import os
 
-# myghost imports
-from myghost.lib.command import Command
-from myghost.lib.module import Module
-from myghost.core.cli.badges import Badges
+# shellfish imports
+from shellfish.lib.command import Command
+from shellfish.lib.module import Module
+from shellfish.core.cli.badges import Badges
 
 
 class Loader:

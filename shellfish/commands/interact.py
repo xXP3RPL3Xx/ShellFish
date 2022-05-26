@@ -1,6 +1,6 @@
-# from myghost.core.db.database import Database, database_entry_to_device
-from myghost.lib.command import Command, CommandInfo
-from myghost.core.base.device_manager import BorgDeviceManager
+# from shellfish.core.db.database import Database, database_entry_to_device
+from shellfish.lib.command import Command, CommandInfo
+from shellfish.core.base.device_manager import BorgDeviceManager
 
 
 class MyGhostCommand(Command):

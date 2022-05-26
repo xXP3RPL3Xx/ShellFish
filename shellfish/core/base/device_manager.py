@@ -1,4 +1,4 @@
-from myghost.core.base.device import Device
+from shellfish.core.base.device import Device
 
 
 class BorgDeviceManager:

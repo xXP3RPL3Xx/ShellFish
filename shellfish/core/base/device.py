@@ -6,12 +6,12 @@ from dataclasses import dataclass
 from adb_shell.adb_device import AdbDeviceTcp
 from adb_shell.exceptions import AdbConnectionError
 
-# myghost imports
-from myghost.core.base.console import Console
-from myghost.core.cli.badges import Badges
+# shellfish imports
+from shellfish.core.base.console import Console
+from shellfish.core.cli.badges import Badges
 
-from myghost.core.cli.colors import Color
-from myghost.core.cli.special_character import SpecialCharacter as SpChar
+from shellfish.core.cli.colors import Color
+from shellfish.core.cli.special_character import SpecialCharacter as SpChar
 
 
 @dataclass
