@@ -11,6 +11,6 @@ class MyGhostCommand(Command):
 
     def run(self, *args, **kwargs) -> None:
         """Load help text from all available commands and print them."""
-        self.commands: list[Command] = [command for command in self.loader.load_all()]
+        self.commands: list[Command] = [command for command in self.loader.load_commands()]
         Tables().print_table("Commands", ('Command', 'Description'),
                              *[(command.name, command.help) for command in self.commands])
