@@ -3,7 +3,6 @@ import importlib.util
 import os
 
 # myghost imports
-from myghost.lib.plugin import Plugin
 from myghost.lib.command import Command
 from myghost.lib.module import Module
 from myghost.core.cli.badges import Badges
@@ -13,9 +12,6 @@ class Loader:
     """Responsible for loading all commands and plugins."""
 
     def __init__(self) -> None:
-        self.plugin_list: list = []
-        self.plugin_path: str = f"{os.path.dirname(__file__)}/../../plugins"
-
         self.command_list: list = []
         self.command_path: str = f"{os.path.dirname(__file__)}/../../commands"
 
@@ -28,19 +24,6 @@ class Loader:
         self.load_modules()
 
         return self.command_list + self.module_list
-
-    def import_plugin(self, name: str) -> Plugin:
-        """Import a module given it's filename."""
-        try:
-            spec = importlib.util.spec_from_file_location(name, self.plugin_path + "/" + name)
-            plugin = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(plugin)
-            plugin = plugin.MyGhostPlugin()
-
-            return plugin
-
-        except Exception as err:
-            Badges.print_error(f"Cannot import module {name}. Reason: {err}")
 
     def import_command(self, name: str) -> Command:
         """Import a command given its filename."""
@@ -68,14 +51,6 @@ class Loader:
         except Exception as err:
             Badges.print_error(f"Cannot import module {name}. Reason: {err}")
 
-    def load_plugins(self) -> list[Plugin]:
-        """Load the plugins defined in the plugins list."""
-        for plugin_name in self.get_plugin_files():
-            plugin = self.import_plugin(plugin_name)
-            self.plugin_list.append(plugin)
-
-        return self.plugin_list
-
     def load_commands(self) -> list[Command]:
         """Load the commands defined in the command list."""
         for command_name in self.get_command_files():
@@ -92,11 +67,6 @@ class Loader:
 
         return self.module_list
 
-    def get_plugin_files(self):
-        """Returns all plugins in the plugins path."""
-        return [plug_file for plug_file in os.listdir(self.plugin_path)
-                if self.check_is_plugin(plug_file)]
-
     def get_command_files(self):
         """Returns all commands in the commands path."""
         return [command_file for command_file in os.listdir(self.command_path)
@@ -108,11 +78,6 @@ class Loader:
                 if self.check_is_command(module_file)]
 
     @staticmethod
-    def check_is_plugin(file_name: str):
-        """Check whether a file_name is a valid plugin."""
-        return file_name.endswith(".py") and file_name != "__init__.py"
-
-    @staticmethod
     def check_is_command(file_name: str):
         """Check whether a file_name is a valid command"""
         return file_name.endswith(".py") and file_name != "__init__.py"
@@ -120,10 +85,8 @@ class Loader:
 
 def main():
     loader = Loader()
-    loader.load_plugins()
     loader.load_commands()
 
-    print(f"Loaded plugins: {loader.plugin_list}")
     print(f"Loaded commands: {loader.command_list}")
 
 
