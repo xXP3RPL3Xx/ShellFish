@@ -18,7 +18,6 @@ from shellfish.core.cli.special_character import SpecialCharacter as SpChar
 class DeviceInfo:
     """Stores basic information about the device."""
 
-    name: str = None
     android_version: str = None
     is_rooted: bool = False
 
@@ -79,14 +78,6 @@ class Device:
 
     def download_file(self, file_path: str):
         """Downloads a file from the connected device."""
-
-    @property
-    def name(self):
-        return self.info.name
-
-    @name.setter
-    def name(self, new_name: str):
-        self.info.name = new_name
 
     @property
     def android_version(self):
