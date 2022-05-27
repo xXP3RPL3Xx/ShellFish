@@ -56,16 +56,23 @@ class Device:
         interact_console: DeviceConsole = DeviceConsole(self)
         interact_console.shell()
 
-    def send_command(self, command: str):
+    def send_command(self, command: str) -> str | None:
         """Send command to connected device."""
         try:
-            self.device.shell(command)
+            cmd_output: str = self.device.shell(command)
+            return cmd_output
 
         except AdbConnectionError:
             Badges.print_error("Socket is not connected. Connect first to a device!")
 
+        return None
+
     def is_rooted(self) -> bool:
         """Returns whether a device is rooted or not."""
+        responder = self.send_command('which su')
+        if not responder or responder.isspace():
+            return False
+        return True
 
     def upload_file(self, file_path: str):
         """Upload a file to the connected device."""
@@ -119,7 +126,7 @@ class DeviceConsole(Console):
         self.session_active = True
         # Load all available commands and modules with their names
         self.load_commands()
-        self.modules = {command.name: command for command in self.loader.load_modules()}
+        self.modules: dict = {command.name: command for command in self.loader.load_modules()}
         # cmd loop
         readline.parse_and_bind("tab: complete")
         readline.set_completer(self.autocomplete)
