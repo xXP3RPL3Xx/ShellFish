@@ -43,6 +43,8 @@ class Device:
         except ConnectionRefusedError:
             Badges.print_error(f"Connection refused: Failed to connect to {self.host}!")
 
+        except TimeoutError:
+            Badges.print_error(f"Timeout Error: Failed to connect to {self.host}!")
         except socket.gaierror:
             Badges.print_error(f"Name or service {self.host} not known!")
 
@@ -63,6 +65,9 @@ class Device:
 
         except AdbConnectionError:
             Badges.print_error("Socket is not connected. Connect first to a device!")
+
+        except TimeoutError:
+            Badges.print_error(f"Timeout Error: Can't send command to {self.host}!")
 
         return None
 
