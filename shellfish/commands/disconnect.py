@@ -17,6 +17,7 @@ class MyGhostCommand(Command):
                 [self.disconnect_device(device_id) for device_id in self.device_manager.all_device_ids]
 
             case [device_id]:
+                """Disconnect a single device with corresponding id."""
                 self.disconnect_device(int(device_id))
             case _:
                 self.print_empty(self.info.usage)

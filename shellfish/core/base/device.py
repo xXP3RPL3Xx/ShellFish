@@ -23,7 +23,7 @@ class DeviceInfo:
 
 
 class Device:
-    """Represents a device e.g. a Samsung phone."""
+    """Represents an Android device e.g. a Samsung phone."""
 
     def __init__(self, host: str, port: int = 5555, timeout=10) -> None:
         self.host: str = host

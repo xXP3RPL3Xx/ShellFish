@@ -15,12 +15,16 @@ class MyGhostCommand(Command):
         match arguments:
             case [device_id]:
                 """Interact with device"""
-                self.device = self.device_manager.get_device_by_id(int(device_id))
-                if self.device:
-                    self.device.interact()
+                try:
+                    self.device = self.device_manager.get_device_by_id(int(device_id))
+                    if self.device:
+                        self.device.interact()
 
-                else:
-                    self.print_error(f"No device with id: {device_id}")
+                    else:
+                        self.print_error(f"No device with id: {device_id}")
+
+                except ValueError:
+                    self.print_error(f"Invalid id: {device_id}")
 
             case _:
                 self.print_empty(f"Usage:{self.info.usage}")
