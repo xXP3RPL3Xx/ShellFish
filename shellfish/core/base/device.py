@@ -132,18 +132,8 @@ class DeviceConsole(Console):
             user_input: list[str] = input(f'{SpChar.REMOVE}{self.arrow}(INTERACTIVE)> ').split()
             command: str = user_input[0]
             arguments: list[str] = user_input[1:]
-            self.match_command(command, arguments)
-
-    def match_command(self, command_name: str, arguments: list[str]):
-        """Match the command name with the right command."""
-        if command_name in self.commands.keys():
-            self.commands[command_name].run(arguments)
-
-        elif command_name in self.modules.keys():
-            self.modules[command_name].run(self.device, arguments)
-
-        else:
-            Badges.print_error("Unrecognized command!")
+            # self.match_command(command, arguments)
+            self.match_command(command, arguments, self.device)
 
 
 def main():

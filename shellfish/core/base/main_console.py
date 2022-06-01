@@ -26,13 +26,6 @@ class MainConsole(Console):
                    SpChar.BOLD + Color.WHITE,
                    SpChar.END, SpChar.LINE, SpChar.END)
 
-    def match_command(self, command_name: str, arguments: list[str]):
-        """Match the command name with the right command."""
-        if command_name in self.commands.keys():
-            self.commands[command_name].run(arguments)
-        else:
-            Badges.print_error("Unrecognized command!")
-
     def shell(self):
         # Print banner
         Badges.print_empty(self.banner)
