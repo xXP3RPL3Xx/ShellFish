@@ -101,7 +101,7 @@ class DeviceConsole(Console):
 
     def __init__(self, device: Device):
         super().__init__()
-        self.modules = {}
+
         self.device = device
         self.session_active: bool = False
 
@@ -122,7 +122,7 @@ class DeviceConsole(Console):
         self.session_active = True
         # Load all available commands and modules with their names
         self.load_commands()
-        self.modules: dict = {command.name: command for command in self.loader.load_modules()}
+        self.load_modules()
         # cmd loop
         readline.parse_and_bind("tab: complete")
         readline.set_completer(self.autocomplete)
@@ -133,7 +133,10 @@ class DeviceConsole(Console):
             command: str = user_input[0]
             arguments: list[str] = user_input[1:]
             # self.match_command(command, arguments)
-            self.match_command(command, arguments, self.device)
+            if command == "quit":
+                self.session_active = False
+            else:
+                self.match_command(command, arguments, self.device)
 
 
 def main():

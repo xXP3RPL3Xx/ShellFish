@@ -2,9 +2,9 @@ from shellfish.core.cli.badges import Badges
 
 
 class Tables:
-    badges = Badges()
-
-    def print_table(self, name, headers, *args, **kwargs) -> None:
+    # def print_table(self, name, headers, *args, **kwargs) -> None:
+    @staticmethod
+    def print_table(name, headers, *args, **kwargs) -> None:
         extra_fill = kwargs.get("extra_fill", 4)
         header_separator = kwargs.get("header_separator", "-")
 
@@ -35,10 +35,10 @@ class Tables:
                 "{:<{}}".format(header_separator * len(header), current_line_fill)
             ))
 
-        self.badges.print_empty('\n' + name.split()[0].title() + name[len(name.split()[0]):] + ':')
-        self.badges.print_empty()
-        self.badges.print_empty(headers_line)
-        self.badges.print_empty(headers_separator_line)
+        Badges.print_empty('\n' + name.split()[0].title() + name[len(name.split()[0]):] + ':')
+        Badges.print_empty()
+        Badges.print_empty(headers_line)
+        Badges.print_empty(headers_separator_line)
         for arg in args:
             content_line = "    "
             for idx, element in enumerate(arg):
@@ -52,5 +52,5 @@ class Tables:
                     content_line,
                     "{:<{}}".format(element, fill_line)
                 ))
-            self.badges.print_empty(content_line)
-        self.badges.print_empty()
+            Badges.print_empty(content_line)
+        Badges.print_empty()

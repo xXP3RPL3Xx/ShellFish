@@ -5,7 +5,8 @@ class MyGhostModule(Module):
     """Show device battery information."""
 
     def __init__(self) -> None:
-        super().__init__(ModuleInfo("info", "info <>", needs_root=False))
+        super().__init__(ModuleInfo("info", "info <>", needs_root=False,
+                                    help_text="Get information about android version, api and more."))
 
     def match_arguments(self, device, arguments: list[str]):
         match arguments:

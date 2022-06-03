@@ -10,11 +10,12 @@ class MyGhostCommand(Command):
     def __init__(self):
         super().__init__(CommandInfo("exit", "exit", "Disconnect all connected devices and exit session."))
 
-    def clean_up(self):
+    @staticmethod
+    def clean_up():
         """Do the cleanup."""
-
-    def run(self, *args, **kwargs) -> None:
         Disconnect().run(["all"])
         Clear().run()
-        sys.exit(0)
 
+    def run(self, *args, **kwargs) -> None:
+        self.clean_up()
+        sys.exit(0)
