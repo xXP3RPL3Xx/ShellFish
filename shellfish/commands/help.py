@@ -13,7 +13,6 @@ class MyGhostCommand(Command):
     def command_help(self):
         """Load help text from all available commands and print them."""
         self.commands: list[Command] = [command for command in self.loader.load_commands()]
-        print(f"Commands {self.commands}")
         Tables.print_table("Commands", ('Command', 'Description'), *[(command.name, command.help)
                                                                      for command in self.commands])
 

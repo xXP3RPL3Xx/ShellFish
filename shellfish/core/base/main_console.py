@@ -32,11 +32,9 @@ class MainConsole(Console):
         # Load all available commands and their names
         self.commands: dict[str, Command] = {command.name: command for command in self.loader.load_commands()}
         # cmd loop
-        # readline.parse_and_bind("tab: complete")
-        # readline.set_completer(self.autocomplete)
+        readline.parse_and_bind("tab: complete")
         while True:
-            readline.parse_and_bind("tab: complete")    # just a test
-            readline.set_completer(self.autocomplete)   # just a test
+            readline.set_completer(self.autocomplete)
 
             user_input: list[str] = input(f'{SpChar.REMOVE}(shellfish)> ').split()
             command: str = user_input[0]
