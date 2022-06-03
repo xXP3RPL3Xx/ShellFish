@@ -1,3 +1,11 @@
+"""
+The device manager is responsible for the connected devices.
+
+Classes:
+    BorgDeviceManager
+"""
+
+
 from shellfish.core.base.device import Device
 
 
@@ -43,6 +51,7 @@ class BorgDeviceManager:
 
 
 def main():
+    """Main method"""
     manager = BorgDeviceManager()
     manager.add_device(Device("10.10.10.0"))
     manager.add_device(Device("10.10.10.1"))
