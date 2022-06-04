@@ -10,6 +10,20 @@ class MyGhostCommand(Command):
         self.commands: list[Command] = []
         self.modules: list = []
 
+    def check_arguments(self, arguments: list[str]):
+        match arguments:
+            case [name]:
+                for command in Loader.command_list:
+                    if name == command.name:
+                        Tables.print_table(f"{name}", ("Help Information", "Usage"), *[(command.help, command.usage)])
+                        return
+
+                self.print_error(f"No command named: {name}.")
+            case _:
+                """Print help menu for all commands and modules."""
+                self.command_help()
+                self.module_help()
+
     def command_help(self):
         """Load help text from all available commands and print them."""
         self.commands: list[Command] = [command for command in self.loader.load_commands()]
@@ -21,7 +35,6 @@ class MyGhostCommand(Command):
         Tables.print_table("Modules", ('Module', 'Description'), *[(module.name, module.help)
                                                                    for module in self.modules])
 
-    def run(self, *args, **kwargs) -> None:
+    def run(self, arguments: list[str] = None) -> None:
         """Load help text from all available commands and print them."""
-        self.command_help()
-        self.module_help()
+        self.check_arguments(arguments)

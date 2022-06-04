@@ -27,7 +27,7 @@ class MyGhostCommand(Command):
                     self.print_error(f"Invalid id: {device_id}")
 
             case _:
-                self.print_empty(f"Usage:{self.info.usage}")
+                self.print_usage()
 
     def run(self, arguments: list[str]):
         """Connect to the device with the given ip."""

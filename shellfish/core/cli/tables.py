@@ -2,7 +2,6 @@ from shellfish.core.cli.badges import Badges
 
 
 class Tables:
-    # def print_table(self, name, headers, *args, **kwargs) -> None:
     @staticmethod
     def print_table(name, headers, *args, **kwargs) -> None:
         extra_fill = kwargs.get("extra_fill", 4)
@@ -23,8 +22,8 @@ class Tables:
         fill = list()
         headers_line = '    '
         headers_separator_line = '    '
-        for idx, header in enumerate(headers):
-            column = [custom_len(arg[idx]) for arg in args]
+        for index, header in enumerate(headers):
+            column = [custom_len(arg[index]) for arg in args]
             column.append(len(header))
 
             current_line_fill = max(column) + extra_fill

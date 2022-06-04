@@ -24,7 +24,7 @@ class MyGhostCommand(Command):
                 """Use default port."""
                 self.connect(host)
             case _:
-                self.print_empty(self.info.usage)
+                self.print_usage()
 
     def connect(self, host: str, port: int = None):
         if port:

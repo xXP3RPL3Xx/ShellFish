@@ -12,13 +12,3 @@ class SpecialCharacter:
     REMOVE = '\033[1K\r'
     CLEAR = '\033[H\033[J'
     NEWLINE = '\n'
-
-
-def main():
-    print("Begin")
-    print(SpecialCharacter.END)
-    print("End")
-
-
-if __name__ == '__main__':
-    main()

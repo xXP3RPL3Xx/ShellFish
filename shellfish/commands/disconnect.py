@@ -20,7 +20,8 @@ class MyGhostCommand(Command):
                 """Disconnect a single device with corresponding id."""
                 self.disconnect_device(int(device_id))
             case _:
-                self.print_empty(self.info.usage)
+                """Wrong arguments"""
+                self.print_usage()
 
     def disconnect_device(self, device_id: int):
         """Disconnect the device with the given device id."""
