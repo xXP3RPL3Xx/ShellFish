@@ -32,16 +32,39 @@ class Console(Badges):
         """Load all modules."""
         self.modules: dict[str, Module] = {module.name: module for module in self.loader.load_modules()}
 
-    def match_command(self, command_name: str, arguments: list[str], device=None):
+    def match_command(self, command_name: str, arguments: list[str] = None, device=None):
         """Match the command name with the right command."""
         if command_name in self.commands.keys():
-            self.commands[command_name].run(arguments)
+            self.execute_command(self.commands[command_name], arguments)
 
         elif command_name in self.modules.keys():
-            self.modules[command_name].run(device, arguments)
+            self.execute_module(self.modules[command_name], device, arguments)
 
         else:
             self.print_error("Unrecognized command!")
+
+    @staticmethod
+    def execute_command(command: Command, arguments: list[str] | None):
+        try:
+            if arguments:
+                command.run(arguments)
+            else:
+                command.run()
+        except TypeError:
+            """Too many or too less arguments."""
+            command.print_usage()
+
+    @staticmethod
+    def execute_module(module: Module, device, arguments: list[str] | None):
+        try:
+            if arguments:
+                module.run(device, arguments)
+            else:
+                module.run(device)
+
+        except TypeError:
+            """Too many or too less arguments."""
+            module.print_usage()
 
     @abstractmethod
     def shell(self):

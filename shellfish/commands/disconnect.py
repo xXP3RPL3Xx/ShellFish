@@ -29,6 +29,6 @@ class MyGhostCommand(Command):
         device.disconnect()
         self.device_manager.remove_device(device_id)
 
-    def run(self, arguments: list[str]) -> None:
+    def run(self, arguments: list[str] | None) -> None:
         """Disconnects device with corresponding device id."""
         self.check_arguments(arguments)

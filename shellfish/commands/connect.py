@@ -36,6 +36,6 @@ class MyGhostCommand(Command):
         if connected:
             self.device_manager.add_device(device)
 
-    def run(self, arguments: list[str]):
+    def run(self, arguments: list[str] | None):
         """Connect to the device with the given ip."""
         self.check_arguments(arguments)

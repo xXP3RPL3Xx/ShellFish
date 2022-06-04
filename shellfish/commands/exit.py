@@ -16,6 +16,6 @@ class MyGhostCommand(Command):
         Disconnect().run(["all"])
         Clear().run()
 
-    def run(self, *args, **kwargs) -> None:
+    def run(self) -> None:
         self.clean_up()
         sys.exit(0)

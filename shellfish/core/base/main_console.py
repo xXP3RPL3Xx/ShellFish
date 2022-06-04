@@ -39,4 +39,12 @@ class MainConsole(Console):
             user_input: list[str] = input(f'{SpChar.REMOVE}(shellfish)> ').split()
             command: str = user_input[0]
             arguments: list[str] = user_input[1:]
+            """try:
+                if arguments:
+                    self.match_command(command, arguments)
+                else:
+                    self.match_command(command)
+            except TypeError:
+                self.print_error(f"Wrong arguments for command: {command}")"""
+
             self.match_command(command, arguments)

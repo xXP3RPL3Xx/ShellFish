@@ -35,6 +35,6 @@ class MyGhostCommand(Command):
         Tables.print_table("Modules", ('Module', 'Description'), *[(module.name, module.help)
                                                                    for module in self.modules])
 
-    def run(self, arguments: list[str] = None) -> None:
+    def run(self, arguments: list[str] | None) -> None:
         """Load help text from all available commands and print them."""
         self.check_arguments(arguments)

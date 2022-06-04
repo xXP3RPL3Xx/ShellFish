@@ -1,14 +1,15 @@
 from shellfish.lib.module import Module, ModuleInfo
+from shellfish.core.base.device import Device
 
 
 class MyGhostModule(Module):
     """Show device battery information."""
 
     def __init__(self) -> None:
-        super().__init__(ModuleInfo("info", "info <>", needs_root=False,
+        super().__init__(ModuleInfo("info", "info <args>", needs_root=False,
                                     help_text="Get information about android version, api and more."))
 
-    def match_arguments(self, device, arguments: list[str]):
+    def match_arguments(self, device: Device, arguments: list[str]):
         match arguments:
             case ["extended"]:
                 # All available information
@@ -24,7 +25,7 @@ class MyGhostModule(Module):
                 self.print_empty("API level information: ")
                 self.print_empty(api_info)
 
-            case []:
+            case None:
                 # Android version:
                 self.print_process("Getting Android version information...")
                 version: str = device.send_command("getprop ro.build.version.release")
@@ -33,5 +34,5 @@ class MyGhostModule(Module):
             case _:
                 self.print_empty(self.info.usage)
 
-    def run(self, device, arguments=None):
+    def run(self, device: Device, arguments: list[str] = None):
         self.match_arguments(device, arguments)

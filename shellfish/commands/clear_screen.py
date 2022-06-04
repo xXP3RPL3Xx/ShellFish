@@ -8,5 +8,5 @@ class MyGhostCommand(Command):
     def __init__(self) -> None:
         super().__init__(CommandInfo("clear", "clear", "Clear terminal screen"))
 
-    def run(self, *args, **kwargs):
+    def run(self):
         self.print_empty(SpecialCharacter.CLEAR, end='')

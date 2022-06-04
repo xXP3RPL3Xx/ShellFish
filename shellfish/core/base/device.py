@@ -5,11 +5,12 @@ from dataclasses import dataclass
 
 from adb_shell.adb_device import AdbDeviceTcp
 from adb_shell.exceptions import AdbConnectionError
+from adb_shell.exceptions import TcpTimeoutException
 
 # shellfish imports
+import shellfish.utils.utils as utils
 from shellfish.core.base.console import Console
 from shellfish.core.cli.badges import Badges
-
 from shellfish.core.cli.colors import Color
 from shellfish.core.cli.special_character import SpecialCharacter as SpChar
 
@@ -69,6 +70,9 @@ class Device:
         except TimeoutError:
             Badges.print_error(f"Timeout Error: Can't send command to {self.host}!")
 
+        except TcpTimeoutException:
+            Badges.print_error(f"Timeout Error: Can't send command to {self.host}!")
+
         return None
 
     def is_rooted(self) -> bool:
@@ -78,8 +82,16 @@ class Device:
             return False
         return True
 
-    def upload_file(self, file_path: str):
+    def upload_file(self, locale_file: str, device_path: str) -> bool:
         """Upload a file to the connected device."""
+        if utils.file_exists(locale_file):
+            Badges.print_process(f"Uploading {locale_file}...")
+            self.device.push(locale_file, device_path)
+
+            Badges.print_process(f"Saving to {device_path}...")
+            Badges.print_success(f"Saved to {device_path}!")
+            return True
+        return False
 
     def download_file(self, file_path: str):
         """Downloads a file from the connected device."""
@@ -136,7 +148,10 @@ class DeviceConsole(Console):
             if command == "quit":
                 self.session_active = False
             else:
-                self.match_command(command, arguments, self.device)
+                if arguments:
+                    self.match_command(command, arguments, self.device)
+                else:
+                    self.match_command(command, device=self.device)
 
 
 def main():
