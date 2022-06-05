@@ -4,8 +4,7 @@ import readline
 from dataclasses import dataclass
 
 from adb_shell.adb_device import AdbDeviceTcp
-from adb_shell.exceptions import AdbConnectionError
-from adb_shell.exceptions import TcpTimeoutException
+from adb_shell.exceptions import AdbConnectionError, TcpTimeoutException
 
 # shellfish imports
 import shellfish.utils.utils as utils
@@ -46,6 +45,10 @@ class Device:
 
         except TimeoutError:
             Badges.print_error(f"Timeout Error: Failed to connect to {self.host}!")
+
+        except TcpTimeoutException:
+            Badges.print_error(f"TCP Timeout Error: Failed to connect to  {self.host}!")
+
         except socket.gaierror:
             Badges.print_error(f"Name or service {self.host} not known!")
 
@@ -93,8 +96,25 @@ class Device:
             return True
         return False
 
-    def download_file(self, file_path: str):
+    def download_file(self, device_file_path: str, locale_output_path: str):
         """Downloads a file from the connected device."""
+        Badges.print_process(f"Downloading {device_file_path} ...")
+        exists, is_dir = utils.exists(locale_output_path), utils.dir_exists(locale_output_path)
+
+        if exists:
+            if is_dir:
+                Badges.print_process(f"Downloading {device_file_path}...")
+                self.device.pull(device_file_path, locale_output_path)
+
+                Badges.print_process(f"Saving to {locale_output_path}...")
+                Badges.print_success(f"Saved to {locale_output_path}!")
+
+                return True
+            else:
+                Badges.print_error(f"{locale_output_path} is not a directory!")
+        else:
+            Badges.print_error(f"Remote file: {device_file_path}: does not exist!")
+            return False
 
     @property
     def android_version(self):
@@ -140,6 +160,7 @@ class DeviceConsole(Console):
         readline.set_completer(self.autocomplete)
         # cmd loop
         Badges.print_empty("Interactive connection spawned.")
+        Badges.print_empty("Type 'quit' to exit interactive shell.")
         while self.session_active:
             user_input: list[str] = input(f'{SpChar.REMOVE}{self.arrow}(INTERACTIVE)> ').split()
             command: str = user_input[0]

@@ -8,8 +8,7 @@ class MyGhostModule(Module):
     def __init__(self) -> None:
         super().__init__(ModuleInfo("battery", "battery", needs_root=False, help_text="Get battery information."))
 
-    def run(self, device: Device, arguments: list[str] = None):
+    def run(self, device: Device):
         self.print_process("Getting battery information...")
-
         output = device.send_command("dumpsys battery")
         self.print_empty(output)

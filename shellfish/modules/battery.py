@@ -10,6 +10,8 @@ class MyGhostModule(Module):
 
     def run(self, device: Device):
         self.print_process("Getting battery information...")
-
         output = device.send_command("dumpsys battery")
-        self.print_empty(output)
+        if output:
+            self.print_empty(output)
+        else:
+            self.print_error("Unable to get battery information.")

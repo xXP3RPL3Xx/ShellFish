@@ -50,6 +50,7 @@ class Console(Badges):
                 command.run(arguments)
             else:
                 command.run()
+
         except TypeError:
             """Too many or too less arguments."""
             command.print_usage()
